@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C43A73D42BDFC6E400C16EBE /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = C43A73D32BDFC6E400C16EBE /* .swiftlint.yml */; };
 		C739AE25284DF28600741E8F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C739AE24284DF28600741E8F /* AppDelegate.swift */; };
 		C739AE27284DF28600741E8F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C739AE26284DF28600741E8F /* SceneDelegate.swift */; };
 		C739AE29284DF28600741E8F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C739AE28284DF28600741E8F /* ViewController.swift */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C43A73D32BDFC6E400C16EBE /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		C739AE21284DF28600741E8F /* Diary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Diary.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C739AE24284DF28600741E8F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C739AE26284DF28600741E8F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -28,20 +30,11 @@
 		C739AE35284DF28600741E8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFrameworksBuildPhase section */
-		C739AE1E284DF28600741E8F /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
-
 /* Begin PBXGroup section */
 		C739AE18284DF28600741E8F = {
 			isa = PBXGroup;
 			children = (
+				C43A73D32BDFC6E400C16EBE /* .swiftlint.yml */,
 				C739AE23284DF28600741E8F /* Diary */,
 				C739AE22284DF28600741E8F /* Products */,
 			);
@@ -78,14 +71,18 @@
 			buildConfigurationList = C739AE38284DF28600741E8F /* Build configuration list for PBXNativeTarget "Diary" */;
 			buildPhases = (
 				C739AE1D284DF28600741E8F /* Sources */,
-				C739AE1E284DF28600741E8F /* Frameworks */,
 				C739AE1F284DF28600741E8F /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				C43A73D22BDFC5CA00C16EBE /* PBXTargetDependency */,
 			);
 			name = Diary;
+			packageProductDependencies = (
+				C43A73CB2BDFC21800C16EBE /* SwiftLintFramework */,
+				C43A73CF2BDFC5C400C16EBE /* swiftlint */,
+			);
 			productName = Diary;
 			productReference = C739AE21284DF28600741E8F /* Diary.app */;
 			productType = "com.apple.product-type.application";
@@ -114,6 +111,9 @@
 				Base,
 			);
 			mainGroup = C739AE18284DF28600741E8F;
+			packageReferences = (
+				C43A73CA2BDFC21800C16EBE /* XCRemoteSwiftPackageReference "SwiftLint" */,
+			);
 			productRefGroup = C739AE22284DF28600741E8F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -128,6 +128,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C43A73D42BDFC6E400C16EBE /* .swiftlint.yml in Resources */,
 				C739AE34284DF28600741E8F /* LaunchScreen.storyboard in Resources */,
 				C739AE31284DF28600741E8F /* Assets.xcassets in Resources */,
 				C739AE2C284DF28600741E8F /* Main.storyboard in Resources */,
@@ -149,6 +150,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C43A73D22BDFC5CA00C16EBE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = C43A73D12BDFC5CA00C16EBE /* SwiftLintPlugin */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		C739AE2A284DF28600741E8F /* Main.storyboard */ = {
@@ -364,6 +372,35 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C43A73CA2BDFC21800C16EBE /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/SwiftLint";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.54.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C43A73CB2BDFC21800C16EBE /* SwiftLintFramework */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C43A73CA2BDFC21800C16EBE /* XCRemoteSwiftPackageReference "SwiftLint" */;
+			productName = SwiftLintFramework;
+		};
+		C43A73CF2BDFC5C400C16EBE /* swiftlint */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C43A73CA2BDFC21800C16EBE /* XCRemoteSwiftPackageReference "SwiftLint" */;
+			productName = swiftlint;
+		};
+		C43A73D12BDFC5CA00C16EBE /* SwiftLintPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C43A73CA2BDFC21800C16EBE /* XCRemoteSwiftPackageReference "SwiftLint" */;
+			productName = "plugin:SwiftLintPlugin";
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		C739AE2D284DF28600741E8F /* Diary.xcdatamodeld */ = {
