@@ -8,93 +8,78 @@
 import UIKit
 
 class DiaryTableViewCell: UITableViewCell {
-    
     static let identifier = "DiaryTableViewCell"
     
-    private let cellTopPadding: CGFloat = 5
-    private let cellBottomPadding: CGFloat = -5
-    private let cellLeftPadding: CGFloat = 15
-    private let cellRightPadding: CGFloat = -15
-    private let cellSpacing: CGFloat = 0
+    private static let subStackViewSpacing: CGFloat = 8
+    private static let mainStackViewSpacing: CGFloat = 4
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        
-        label.font = .systemFont(ofSize: 20)
-        
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.adjustsFontForContentSizeCategory = true
+        label.font = .preferredFont(forTextStyle: .title3)
+        return label
+    }()
+    
+    let editedDateLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.adjustsFontForContentSizeCategory = true
+        label.font = .preferredFont(forTextStyle: .body)
         return label
     }()
     
     let bodyLabel: UILabel = {
         let label = UILabel()
-        
-        label.font = .systemFont(ofSize: 14)
-        
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.adjustsFontForContentSizeCategory = true
+        label.font = .preferredFont(forTextStyle: .footnote)
         return label
     }()
     
-    let createdAtLabel: UILabel = {
-        let label = UILabel()
-        
-        label.font = .systemFont(ofSize: 16)
-        
-        return label
-    }()
-    
-    let bodyStackView: UIStackView = {
+    private let subStackView: UIStackView = {
         let stackView = UIStackView()
-        
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .horizontal
+        stackView.alignment = .center
         stackView.distribution = .fill
-        stackView.spacing = 5
-        
+        stackView.spacing = subStackViewSpacing
         return stackView
     }()
     
-    let cellStackView: UIStackView = {
+    private let mainStackView: UIStackView = {
         let stackView = UIStackView()
-        
-        stackView.distribution = .fillEqually
-        stackView.spacing = 0
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
-        
+        stackView.alignment = .leading
+        stackView.distribution = .fill
+        stackView.spacing = mainStackViewSpacing
         return stackView
     }()
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        setConstraints()
+        setupUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setConstraints() {
-        contentView.addSubview(cellStackView)
+    private func setupUI() {
+        subStackView.addArrangedSubview(editedDateLabel)
+        subStackView.addArrangedSubview(bodyLabel)
+        mainStackView.addArrangedSubview(titleLabel)
+        mainStackView.addArrangedSubview(subStackView)
+        contentView.addSubview(mainStackView)
         
-        cellStackView.addArrangedSubview(titleLabel)
-        cellStackView.addArrangedSubview(bodyStackView)
-        
-        bodyStackView.addArrangedSubview(createdAtLabel)
-        bodyStackView.addArrangedSubview(bodyLabel)
-        createdAtLabel.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-        
-        cellStackView.translatesAutoresizingMaskIntoConstraints = false
+        editedDateLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         
         NSLayoutConstraint.activate([
-            cellStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: cellTopPadding),
-            cellStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: cellBottomPadding),
-            cellStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: cellLeftPadding),
-            cellStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: cellRightPadding),
+            mainStackView.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
+            mainStackView.bottomAnchor.constraint(equalTo: contentView.layoutMarginsGuide.bottomAnchor),
+            mainStackView.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            mainStackView.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
         ])
     }
 }
