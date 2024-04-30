@@ -90,7 +90,7 @@ extension ViewController: UITableViewDataSource {
         cell.titleLabel.text = diaries[indexPath.row].title
         cell.bodyLabel.text = diaries[indexPath.row].body
         
-        let date = Date(timeIntervalSinceReferenceDate: TimeInterval(diaries[indexPath.row].createdAt))
+        let date = Date(timeIntervalSince1970: TimeInterval(diaries[indexPath.row].createdAt))
         cell.createdAtLabel.text = DateFormatter.formatDate(date)
         
         return cell
