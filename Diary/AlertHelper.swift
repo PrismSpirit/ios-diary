@@ -16,12 +16,15 @@ class AlertHelper {
     static func showAlert(title: String?, message: String?, type: AlertType, viewController: UIViewController) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
+        let confirmAction = UIAlertAction(title: "확인", style: .default)
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+        
         switch type {
         case .onlyConfirm:
-            alertController.addAction(.confirmAction)
+            alertController.addAction(confirmAction)
         case .confirmAndCancel:
-            alertController.addAction(.confirmAction)
-            alertController.addAction(.cancelAction)
+            alertController.addAction(confirmAction)
+            alertController.addAction(cancelAction)
         }
         
         viewController.present(alertController, animated: true)
