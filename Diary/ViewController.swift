@@ -32,6 +32,8 @@ class ViewController: UIViewController {
     
     func setConstraints() {
         let safeArea = view.safeAreaLayoutGuide
+        view.backgroundColor = .systemBackground
+        
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(tableView)
