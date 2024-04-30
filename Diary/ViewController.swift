@@ -72,10 +72,6 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70
-    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let nextController = UIViewController()
         navigationController?.pushViewController(nextController, animated: true)
@@ -88,16 +84,13 @@ extension ViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: DiaryTableViewCell.identifier, for: indexPath) as? DiaryTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: DiaryTableViewCell.identifier,
+                                                       for: indexPath) as? DiaryTableViewCell else {
             return UITableViewCell()
         }
         
-        cell.accessoryType = .disclosureIndicator
-        cell.titleLabel.text = diaries[indexPath.row].title
-        cell.bodyLabel.text = diaries[indexPath.row].body
-        
-        let date = Date(timeIntervalSince1970: TimeInterval(diaries[indexPath.row].createdAt))
-        cell.createdAtLabel.text = DateFormatter.formatDate(date)
+        let diary = diaries[indexPath.row]
+        cell.updateComponents(with: diary)
         
         return cell
     }

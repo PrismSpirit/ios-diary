@@ -59,6 +59,7 @@ class DiaryTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        accessoryType = .disclosureIndicator
         setupUI()
     }
     
@@ -81,5 +82,11 @@ class DiaryTableViewCell: UITableViewCell {
             mainStackView.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
             mainStackView.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
         ])
+    }
+    
+    func updateComponents(with diary: Diary) {
+        titleLabel.text = diary.title
+        editedDateLabel.text = diary.editedDate.formatted(.defaultDateFormatStyle)
+        bodyLabel.text = diary.body
     }
 }
