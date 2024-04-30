@@ -53,8 +53,7 @@ class ViewController: UIViewController {
         }
         
         do {
-            let tempData = try JSONDecoder().decode([Diary].self, from: asset.data)
-            diaries = tempData
+            diaries = try JSONDecoder().decode([DiaryDTO].self, from: asset.data).map { $0.toModel() }
         } catch let decodingError as DecodingError {
             AlertHelper.showAlert(title: decodingError.localizedDescription, message: nil, type: .onlyConfirm, viewController: self)
         } catch {
