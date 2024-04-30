@@ -73,8 +73,8 @@ class ViewController: UIViewController {
 
 extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let nextController = UIViewController()
-        navigationController?.pushViewController(nextController, animated: true)
+        let detailViewController = DiaryListDetailViewController(diary: diaries[indexPath.row])
+        navigationController?.pushViewController(detailViewController, animated: true)
     }
 }
 

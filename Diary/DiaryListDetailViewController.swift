@@ -17,12 +17,10 @@ final class DiaryListDetailViewController: UIViewController {
         return textView
     }()
     
-    private let date: Date
-    private let memo: String
+    private var diary: Diary
     
-    init(date: Date, memo: String) {
-        self.date = date
-        self.memo = memo
+    init(diary: Diary) {
+        self.diary = diary
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -35,8 +33,8 @@ final class DiaryListDetailViewController: UIViewController {
         
         setupUI()
         
-        title = date.formatted(.defaultDateFormatStyle)
-        textView.text = memo
+        title = diary.editedDate.formatted(.defaultDateFormatStyle)
+        textView.text = diary.title + "\n\n" + diary.body
     }
     
     private func setupUI() {
