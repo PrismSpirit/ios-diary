@@ -21,6 +21,7 @@ class ViewController: UIViewController {
         configureTableView()
         setConstraints()
         loadDiary()
+        setNavigation()
     }
     
     func configureTableView() {
@@ -58,6 +59,17 @@ class ViewController: UIViewController {
             print(error.localizedDescription)
         }
     }
+    
+    func setNavigation() {
+        self.navigationItem.title = "일기장"
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addDiary))
+    }
+    
+    @objc func addDiary() {
+        print(#function)
+    }
+}
+
 extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
