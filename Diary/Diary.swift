@@ -13,7 +13,8 @@ struct Diary: Codable {
     let createdAt: Int
 
     private enum CodingKeys: String, CodingKey {
-        case title, body
+        case title
+        case body
         case createdAt = "created_at"
     }
 }
