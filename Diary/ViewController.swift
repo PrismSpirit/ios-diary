@@ -19,9 +19,9 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         configureTableView()
-        setConstraints()
+        configureNavigation()
+        setupUI()
         loadDiary()
-        setNavigation()
     }
     
     func configureTableView() {
@@ -30,8 +30,9 @@ class ViewController: UIViewController {
         tableView.register(DiaryTableViewCell.self, forCellReuseIdentifier: DiaryTableViewCell.identifier)
     }
     
-    func setConstraints() {
+    func setupUI() {
         let safeArea = view.safeAreaLayoutGuide
+        
         view.backgroundColor = .systemBackground
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -61,9 +62,9 @@ class ViewController: UIViewController {
         }
     }
     
-    func setNavigation() {
-        self.navigationItem.title = "일기장"
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addDiary))
+    func configureNavigation() {
+        navigationItem.title = "일기장"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addDiary))
     }
     
     @objc func addDiary() {
