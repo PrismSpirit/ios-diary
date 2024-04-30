@@ -51,8 +51,10 @@ class ViewController: UIViewController {
         do {
             let tempData = try JSONDecoder().decode([Diary].self, from: asset.data)
             diaries = tempData
+        } catch let decodingError as DecodingError {
+            AlertHelper.showAlert(title: decodingError.localizedDescription, message: nil, type: .onlyConfirm, viewController: self)
         } catch {
-            print(error.localizedDescription)
+            AlertHelper.showAlert(title: error.localizedDescription, message: nil, type: .onlyConfirm, viewController: self)
         }
     }
     
@@ -62,13 +64,18 @@ class ViewController: UIViewController {
     }
     
     @objc func addDiary() {
-        print(#function)
+        AlertHelper.showAlert(title: "일기장 추가", message: nil, type: .confirmAndCancel, viewController: self)
     }
 }
 
 extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let nextController = UIViewController()
+        navigationController?.pushViewController(nextController, animated: true)
     }
 }
 
