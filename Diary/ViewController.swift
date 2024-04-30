@@ -91,10 +91,7 @@ extension ViewController: UITableViewDataSource {
         cell.bodyLabel.text = diaries[indexPath.row].body
         
         let date = Date(timeIntervalSinceReferenceDate: TimeInterval(diaries[indexPath.row].createdAt))
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale.current
-        dateFormatter.dateFormat = "yyyy년 MM월 dd일"
-        cell.createdAtLabel.text = dateFormatter.string(from: date)
+        cell.createdAtLabel.text = DateFormatter.formatDate(date)
         
         return cell
     }
