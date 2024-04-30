@@ -44,16 +44,12 @@ class ViewController: UIViewController {
     }
     
     func loadDiary() {
-        let fileName = "sample"
-        
-        guard let asset = NSDataAsset.init(name: fileName) else {
+        guard let asset = NSDataAsset.init(name: Constants.jsonFileName) else {
             return
         }
         
-        let jsonDecoder = JSONDecoder()
-
         do {
-            let tempData = try jsonDecoder.decode([Diary].self, from: asset.data)
+            let tempData = try JSONDecoder().decode([Diary].self, from: asset.data)
             diaries = tempData
         } catch {
             print(error.localizedDescription)
