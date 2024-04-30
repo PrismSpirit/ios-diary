@@ -15,7 +15,7 @@ class DiaryTableViewCell: UITableViewCell {
     private let cellBottomPadding: CGFloat = -5
     private let cellLeftPadding: CGFloat = 15
     private let cellRightPadding: CGFloat = -15
-    private let cellSpacing: CGFloat = 10
+    private let cellSpacing: CGFloat = 0
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -49,7 +49,17 @@ class DiaryTableViewCell: UITableViewCell {
         
         return stackView
     }()
-
+    
+    let cellStackView: UIStackView = {
+        let stackView = UIStackView()
+        
+        stackView.distribution = .fillEqually
+        stackView.spacing = 0
+        stackView.axis = .vertical
+        
+        return stackView
+    }()
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
@@ -61,29 +71,30 @@ class DiaryTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(bodyStackView)
+        setConstraints()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setConstraints() {
+        contentView.addSubview(cellStackView)
+        
+        cellStackView.addArrangedSubview(titleLabel)
+        cellStackView.addArrangedSubview(bodyStackView)
         
         bodyStackView.addArrangedSubview(createdAtLabel)
         bodyStackView.addArrangedSubview(bodyLabel)
         createdAtLabel.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        bodyStackView.translatesAutoresizingMaskIntoConstraints = false
+        cellStackView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: cellTopPadding),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: cellLeftPadding),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: cellRightPadding),
-            
-            bodyStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: cellSpacing),
-            bodyStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: cellLeftPadding),
-            bodyStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: cellRightPadding),
-            bodyStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: cellBottomPadding)
+            cellStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: cellTopPadding),
+            cellStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: cellBottomPadding),
+            cellStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: cellLeftPadding),
+            cellStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: cellRightPadding),
         ])
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
