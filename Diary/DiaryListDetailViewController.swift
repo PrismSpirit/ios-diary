@@ -19,13 +19,6 @@ final class DiaryListDetailViewController: UIViewController {
     
     private let date: Date
     private let memo: String
-    private let defaultDateFormatStyle = Date.FormatStyle(
-        date: .abbreviated,
-        time: .omitted,
-        locale: .autoupdatingCurrent,
-        calendar: .autoupdatingCurrent,
-        timeZone: .autoupdatingCurrent
-    )
     
     init(date: Date, memo: String) {
         self.date = date
@@ -42,7 +35,7 @@ final class DiaryListDetailViewController: UIViewController {
         
         setupUI()
         
-        title = date.formatted(defaultDateFormatStyle)
+        title = date.formatted(.defaultDateFormatStyle)
         textView.text = memo
     }
     
