@@ -1,12 +1,12 @@
 //
-//  Diary - ViewController.swift
-//  Created by yagom. 
+//  Diary - DiaryListViewController.swift
+//  Created by yagom.
 //  Copyright © yagom. All rights reserved.
 // 
 
 import UIKit
 
-final class ViewController: UIViewController {
+final class DiaryListViewController: UIViewController {
     private var diaries: [Diary] = []
     
     private let tableView: UITableView = {
@@ -77,14 +77,14 @@ final class ViewController: UIViewController {
     }
 }
 
-extension ViewController: UITableViewDelegate {
+extension DiaryListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailViewController = DiaryListDetailViewController(diary: diaries[indexPath.row])
         navigationController?.pushViewController(detailViewController, animated: true)
     }
 }
 
-extension ViewController: UITableViewDataSource {
+extension DiaryListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return diaries.count
     }
