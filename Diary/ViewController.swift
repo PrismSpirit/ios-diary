@@ -7,7 +7,7 @@
 import UIKit
 
 final class ViewController: UIViewController {
-    var diaries: [Diary] = []
+    private var diaries: [Diary] = []
     
     private let tableView: UITableView = {
         let tableView = UITableView()

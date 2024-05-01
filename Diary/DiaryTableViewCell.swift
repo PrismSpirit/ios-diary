@@ -13,7 +13,7 @@ final class DiaryTableViewCell: UITableViewCell {
     private static let subStackViewSpacing: CGFloat = 8
     private static let mainStackViewSpacing: CGFloat = 4
     
-    let titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.adjustsFontForContentSizeCategory = true
@@ -21,7 +21,7 @@ final class DiaryTableViewCell: UITableViewCell {
         return label
     }()
     
-    let editedDateLabel: UILabel = {
+    private let editedDateLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.adjustsFontForContentSizeCategory = true
@@ -29,7 +29,7 @@ final class DiaryTableViewCell: UITableViewCell {
         return label
     }()
     
-    let bodyLabel: UILabel = {
+    private let bodyLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.adjustsFontForContentSizeCategory = true
