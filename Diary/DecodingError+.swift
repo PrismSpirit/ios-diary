@@ -1,5 +1,5 @@
 //
-//  DecodingErrorExtension.swift
+//  DecodingError+.swift
 //  Diary
 //
 //  Created by H on 4/30/24.
