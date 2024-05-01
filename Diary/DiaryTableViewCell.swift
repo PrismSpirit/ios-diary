@@ -2,7 +2,7 @@
 //  DiaryTableViewCell.swift
 //  Diary
 //
-//  Created by prism, gama on 4/30/24.
+//  Created by Prism, Gama on 4/30/24.
 //
 
 import UIKit

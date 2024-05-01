@@ -2,7 +2,7 @@
 //  DecodingError+.swift
 //  Diary
 //
-//  Created by H on 4/30/24.
+//  Created by Prism, Gama on 4/30/24.
 //
 
 import Foundation

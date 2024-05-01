@@ -2,7 +2,7 @@
 //  FormatStyle+.swift
 //  Diary
 //
-//  Created by Jaehun Lee on 4/30/24.
+//  Created by Prism, Gama on 4/30/24.
 //
 
 import Foundation
