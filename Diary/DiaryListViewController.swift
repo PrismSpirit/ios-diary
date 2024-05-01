@@ -24,13 +24,13 @@ final class DiaryListViewController: UIViewController {
         loadDiary()
     }
     
-    func configureTableView() {
+    private func configureTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(DiaryTableViewCell.self, forCellReuseIdentifier: DiaryTableViewCell.identifier)
     }
     
-    func setupUI() {
+    private func setupUI() {
         view.backgroundColor = .systemBackground
         view.addSubview(tableView)
         
@@ -42,7 +42,7 @@ final class DiaryListViewController: UIViewController {
         ])
     }
     
-    func loadDiary() {
+    private func loadDiary() {
         guard let asset = NSDataAsset.init(name: Constants.jsonFileName) else {
             return
         }
@@ -62,14 +62,14 @@ final class DiaryListViewController: UIViewController {
         }
     }
     
-    func configureNavigation() {
+    private func configureNavigation() {
         navigationItem.title = "일기장"
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, 
                                                             target: self,
                                                             action: #selector(addDiary))
     }
     
-    @objc func addDiary() {
+    @objc private func addDiary() {
         AlertHelper.showAlert(title: "일기장 추가",
                               message: nil,
                               type: .confirmAndCancel,
