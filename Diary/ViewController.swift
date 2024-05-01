@@ -6,7 +6,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
     var diaries: [Diary] = []
     
     private let tableView: UITableView = {

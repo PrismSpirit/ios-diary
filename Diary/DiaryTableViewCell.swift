@@ -7,7 +7,7 @@
 
 import UIKit
 
-class DiaryTableViewCell: UITableViewCell {
+final class DiaryTableViewCell: UITableViewCell {
     static let identifier = "DiaryTableViewCell"
     
     private static let subStackViewSpacing: CGFloat = 8
