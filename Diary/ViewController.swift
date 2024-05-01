@@ -7,11 +7,11 @@
 import UIKit
 
 class ViewController: UIViewController {
-    
     var diaries: [Diary] = []
     
     private let tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .plain)
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
     
@@ -31,19 +31,14 @@ class ViewController: UIViewController {
     }
     
     func setupUI() {
-        let safeArea = view.safeAreaLayoutGuide
-        
         view.backgroundColor = .systemBackground
-        
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        
         view.addSubview(tableView)
         
         NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
-            tableView.topAnchor.constraint(equalTo: safeArea.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor)
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
     
@@ -55,19 +50,30 @@ class ViewController: UIViewController {
         do {
             diaries = try JSONDecoder().decode([DiaryDTO].self, from: asset.data).map { $0.toModel() }
         } catch let decodingError as DecodingError {
-            AlertHelper.showAlert(title: decodingError.localizedDescription, message: nil, type: .onlyConfirm, viewController: self)
+            AlertHelper.showAlert(title: decodingError.localizedDescription,
+                                  message: nil,
+                                  type: .onlyConfirm,
+                                  viewController: self)
         } catch {
-            AlertHelper.showAlert(title: error.localizedDescription, message: nil, type: .onlyConfirm, viewController: self)
+            AlertHelper.showAlert(title: error.localizedDescription,
+                                  message: nil,
+                                  type: .onlyConfirm,
+                                  viewController: self)
         }
     }
     
     func configureNavigation() {
         navigationItem.title = "일기장"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addDiary))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, 
+                                                            target: self,
+                                                            action: #selector(addDiary))
     }
     
     @objc func addDiary() {
-        AlertHelper.showAlert(title: "일기장 추가", message: nil, type: .confirmAndCancel, viewController: self)
+        AlertHelper.showAlert(title: "일기장 추가",
+                              message: nil,
+                              type: .confirmAndCancel,
+                              viewController: self)
     }
 }
 

@@ -21,6 +21,8 @@ struct DiaryDTO: Decodable {
 
 extension DiaryDTO {
     func toModel() -> Diary {
-        return .init(title: title, body: body, editedDate: Date(timeIntervalSince1970: TimeInterval(createdAt)))
+        return .init(title: title,
+                     body: body,
+                     editedDate: Date(timeIntervalSince1970: TimeInterval(createdAt)))
     }
 }
