@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AlertHelper {
+struct AlertHelper {
     enum AlertType {
         case onlyConfirm
         case confirmAndCancel
