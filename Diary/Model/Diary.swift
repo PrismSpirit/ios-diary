@@ -1,5 +1,5 @@
 //
-//  TempData.swift
+//  Diary.swift
 //  Diary
 //
 //  Created by Prism, Gama on 4/30/24.
