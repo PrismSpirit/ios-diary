@@ -7,9 +7,7 @@
 
 import UIKit
 
-final class DiaryTableViewCell: UITableViewCell {
-    static let identifier = "DiaryTableViewCell"
-    
+final class DiaryTableViewCell: UITableViewCell, ReuseIdentifiable {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false

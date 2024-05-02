@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		06391ED82BE328C900B7DDBD /* ReuseIdentifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06391ED72BE328C900B7DDBD /* ReuseIdentifiable.swift */; };
 		06D56F712BE0818E0043B39F /* Diary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06D56F702BE0818E0043B39F /* Diary.swift */; };
 		06D56F732BE0863C0043B39F /* DiaryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06D56F722BE0863C0043B39F /* DiaryTableViewCell.swift */; };
 		06D56F7B2BE0D3D10043B39F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06D56F7A2BE0D3D10043B39F /* Constants.swift */; };
@@ -25,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		06391ED72BE328C900B7DDBD /* ReuseIdentifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReuseIdentifiable.swift; sourceTree = "<group>"; };
 		06D56F702BE0818E0043B39F /* Diary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diary.swift; sourceTree = "<group>"; };
 		06D56F722BE0863C0043B39F /* DiaryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryTableViewCell.swift; sourceTree = "<group>"; };
 		06D56F7A2BE0D3D10043B39F /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -45,6 +47,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		06391ED62BE328B000B7DDBD /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				06391ED72BE328C900B7DDBD /* ReuseIdentifiable.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
 		C4B32A902BE21E5100863B9B /* App */ = {
 			isa = PBXGroup;
 			children = (
@@ -134,6 +144,7 @@
 				C4B32A942BE21EE600863B9B /* Extensions */,
 				C4B32A962BE2292000863B9B /* Helper */,
 				C4B32A952BE21F0F00863B9B /* Resources */,
+				06391ED62BE328B000B7DDBD /* Protocols */,
 				C739AE35284DF28600741E8F /* Info.plist */,
 				C739AE2D284DF28600741E8F /* Diary.xcdatamodeld */,
 			);
@@ -226,6 +237,7 @@
 				C739AE27284DF28600741E8F /* SceneDelegate.swift in Sources */,
 				C4A9889A2BE080A900ADA350 /* DiaryListDetailViewController.swift in Sources */,
 				C739AE2F284DF28600741E8F /* Diary.xcdatamodeld in Sources */,
+				06391ED82BE328C900B7DDBD /* ReuseIdentifiable.swift in Sources */,
 				06D56F712BE0818E0043B39F /* Diary.swift in Sources */,
 				C478C0FE2BE1272200A76ABE /* DiaryDTO.swift in Sources */,
 				06D56F732BE0863C0043B39F /* DiaryTableViewCell.swift in Sources */,

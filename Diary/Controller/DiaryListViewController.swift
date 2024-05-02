@@ -27,7 +27,7 @@ final class DiaryListViewController: UIViewController {
     private func configureTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(DiaryTableViewCell.self, forCellReuseIdentifier: DiaryTableViewCell.identifier)
+        tableView.register(DiaryTableViewCell.self, forCellReuseIdentifier: DiaryTableViewCell.reuseIdentifier)
     }
     
     private func setupUI() {
@@ -96,7 +96,7 @@ extension DiaryListViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let diary = diaries[safeIndex: indexPath.row],
-              let cell = tableView.dequeueReusableCell(withIdentifier: DiaryTableViewCell.identifier,
+              let cell = tableView.dequeueReusableCell(withIdentifier: DiaryTableViewCell.reuseIdentifier,
                                                        for: indexPath) as? DiaryTableViewCell else {
             return UITableViewCell()
         }
