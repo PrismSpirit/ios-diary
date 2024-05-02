@@ -79,7 +79,11 @@ final class DiaryListViewController: UIViewController {
 
 extension DiaryListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let detailViewController = DiaryListDetailViewController(diary: diaries[indexPath.row])
+        guard let diary = diaries[safeIndex: indexPath.row] else {
+            return
+        }
+        
+        let detailViewController = DiaryListDetailViewController(diary: diary)
         navigationController?.pushViewController(detailViewController, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -91,12 +95,12 @@ extension DiaryListViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: DiaryTableViewCell.identifier,
+        guard let diary = diaries[safeIndex: indexPath.row],
+              let cell = tableView.dequeueReusableCell(withIdentifier: DiaryTableViewCell.identifier,
                                                        for: indexPath) as? DiaryTableViewCell else {
             return UITableViewCell()
         }
         
-        let diary = diaries[indexPath.row]
         cell.updateComponents(with: diary)
         
         return cell
