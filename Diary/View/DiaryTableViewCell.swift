@@ -10,9 +10,6 @@ import UIKit
 final class DiaryTableViewCell: UITableViewCell {
     static let identifier = "DiaryTableViewCell"
     
-    private static let subStackViewSpacing: CGFloat = 8
-    private static let mainStackViewSpacing: CGFloat = 4
-    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -43,7 +40,7 @@ final class DiaryTableViewCell: UITableViewCell {
         stackView.axis = .horizontal
         stackView.alignment = .center
         stackView.distribution = .fill
-        stackView.spacing = subStackViewSpacing
+        stackView.spacing = 8
         return stackView
     }()
     
@@ -53,7 +50,7 @@ final class DiaryTableViewCell: UITableViewCell {
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.distribution = .fill
-        stackView.spacing = mainStackViewSpacing
+        stackView.spacing = 4
         return stackView
     }()
     
