@@ -4,6 +4,8 @@ disabled_rules: # rule identifiers turned on by default to exclude from running
   - comma
   - control_statement
   - unneeded_override
+  - trailing_whitespace
+  - trailing_comma
 opt_in_rules: # some rules are turned off by default, so you need to opt-in
   - empty_count # find all the available rules by running: `swiftlint rules`
   - overridden_super_call
