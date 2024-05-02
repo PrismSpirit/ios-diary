@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct Diary {
+struct Diary: Identifiable, Hashable {
+    let id = UUID()
     let title: String
     let body: String
     let editedDate: Date
