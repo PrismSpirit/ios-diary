@@ -17,7 +17,7 @@ final class DiaryListDetailViewController: UIViewController {
         return textView
     }()
     
-    private var diary: Diary
+    private let diary: Diary
     
     init(diary: Diary) {
         self.diary = diary
