@@ -79,9 +79,20 @@ final class DiaryTableViewCell: UITableViewCell, ReuseIdentifiable {
         ])
     }
     
-    func updateComponents(with diary: Diary) {
-        titleLabel.text = diary.title
-        editedDateLabel.text = diary.editedDate.formatted(.defaultDateFormatStyle)
-        bodyLabel.text = diary.body
+//    func configureComponents(viewModel: DiaryTableViewCellViewModel) {
+    func configureComponents(viewModel: DiaryListDetailViewModel) {
+//        titleLabel.text = viewModel.titleText
+//        editedDateLabel.text = viewModel.editedDateText
+//        bodyLabel.text = viewModel.bodyText
+        
+        titleLabel.text = viewModel.diary.title
+        editedDateLabel.text = viewModel.diary.formatDate()
+        bodyLabel.text = viewModel.diary.body
     }
+    
+//    func updateComponents(with diary: Diary) {
+//        titleLabel.text = diary.title
+//        editedDateLabel.text = diary.editedDate.formatted(.defaultDateFormatStyle)
+//        bodyLabel.text = diary.body
+//    }
 }

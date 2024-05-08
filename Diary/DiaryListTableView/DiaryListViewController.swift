@@ -7,7 +7,7 @@
 import UIKit
 
 final class DiaryListViewController: UIViewController {
-    private var diaries: [Diary] = []
+    lazy var viewModel = DiaryListViewModel()
     
     private let tableView: UITableView = {
         let tableView = UITableView()
@@ -21,7 +21,12 @@ final class DiaryListViewController: UIViewController {
         configureTableView()
         configureNavigation()
         setupUI()
-        loadDiary()
+        initializeViewModel()
+        setBindings()
+    }
+    
+    func initializeViewModel() {
+        viewModel.requestFetchData()
     }
     
     private func configureTableView() {
@@ -42,48 +47,41 @@ final class DiaryListViewController: UIViewController {
         ])
     }
     
-    private func loadDiary() {
-        guard let asset = NSDataAsset.init(name: Constants.jsonFileName) else {
-            return
-        }
-        
-        do {
-            diaries = try JSONDecoder().decode([DiaryDTO].self, from: asset.data).map { $0.toModel() }
-        } catch let decodingError as DecodingError {
-            AlertHelper.showAlert(title: decodingError.localizedDescription,
-                                  message: nil,
-                                  type: .onlyConfirm,
-                                  viewController: self)
-        } catch {
-            AlertHelper.showAlert(title: error.localizedDescription,
-                                  message: nil,
-                                  type: .onlyConfirm,
-                                  viewController: self)
-        }
-    }
-    
     private func configureNavigation() {
         navigationItem.title = "일기장"
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, 
                                                             target: self,
-                                                            action: #selector(addDiary))
+                                                            action: #selector(deleteDiary))
+//                                                            action: #selector(addDiary))
+//                                                            action: #selector(updateDiary))
+    }
+    
+    @objc private func updateDiary() {
+        viewModel.modifyDiary(index: Int.random(in: 0..<viewModel.diaries.count))
+    }
+    
+    @objc private func deleteDiary() {
+        viewModel.deleteDiary(index: 0)
     }
     
     @objc private func addDiary() {
-        AlertHelper.showAlert(title: "일기장 추가",
-                              message: nil,
-                              type: .confirmAndCancel,
-                              viewController: self)
+        viewModel.addDiary()
+        let detailViewController = DiaryListDetailViewController(viewModel: viewModel.getLatestCellViewModel())
+        detailViewController.configureCompoonents()
+        navigationController?.pushViewController(detailViewController, animated: true)
+    }
+    
+    func setBindings() {
+        viewModel.didChangeDiaries = { [weak self] _ in
+            self?.tableView.reloadData()
+        }
     }
 }
 
 extension DiaryListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let diary = diaries[safeIndex: indexPath.row] else {
-            return
-        }
-        
-        let detailViewController = DiaryListDetailViewController(diary: diary)
+        let detailViewController = DiaryListDetailViewController(viewModel: viewModel.getCellViewModel(index: indexPath.row))
+        detailViewController.configureCompoonents()
         navigationController?.pushViewController(detailViewController, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -91,17 +89,14 @@ extension DiaryListViewController: UITableViewDelegate {
 
 extension DiaryListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return diaries.count
+        return viewModel.numberOfCells
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let diary = diaries[safeIndex: indexPath.row],
-              let cell = tableView.dequeueReusableCell(withIdentifier: DiaryTableViewCell.reuseIdentifier,
-                                                       for: indexPath) as? DiaryTableViewCell else {
-            return UITableViewCell()
-        }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: DiaryTableViewCell.reuseIdentifier, for: indexPath) as? DiaryTableViewCell else { return UITableViewCell() }
         
-        cell.updateComponents(with: diary)
+        let cellViewModel = viewModel.getCellViewModel(index: indexPath.row)
+        cell.configureComponents(viewModel: cellViewModel)
         
         return cell
     }

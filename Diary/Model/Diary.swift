@@ -9,7 +9,11 @@ import Foundation
 
 struct Diary: Identifiable, Hashable {
     let id = UUID()
-    let title: String
-    let body: String
-    let editedDate: Date
+    var title: String
+    var body: String
+    var editedDate: Date
+    
+    func formatDate() -> String {
+        return editedDate.formatted(.defaultDateFormatStyle)
+    }
 }
