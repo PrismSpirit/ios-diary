@@ -45,6 +45,7 @@ final class DiaryStorage {
             if let result = try taskContext.fetch(request).first {
                 result.setValue(body, forKey: "body")
                 result.setValue(Date(), forKey: "editedDate")
+                try taskContext.save()
             }
         }
     }
