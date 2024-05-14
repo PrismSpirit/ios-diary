@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 final class DiaryListDetailViewController: UIViewController {
     private let textView: UITextView = {
@@ -17,10 +18,12 @@ final class DiaryListDetailViewController: UIViewController {
         return textView
     }()
     
-    private let diary: Diary
+    private let viewModel: DiaryListDetailViewModel
+    private let output: PassthroughSubject<DiaryListDetailViewModel.Input, Never> = .init()
+    private var cancellables: Set<AnyCancellable> = .init()
     
     init(diary: Diary) {
-        self.diary = diary
+        self.viewModel = DiaryListDetailViewModel(diary: diary, diaryListDetailUseCase: DiaryListDetailUseCase(diaryRepository: DiaryRepository(diaryPersistentStorage: DiaryStorage(coreDataStorage: CoreDataStorage.shared))))
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -31,10 +34,46 @@ final class DiaryListDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        configureTextView()
         setupUI()
         
+<<<<<<< Updated upstream:Diary/Controller/DiaryListDetailViewController.swift
         title = diary.editedDate.formatted(.defaultDateFormatStyle)
         textView.text = diary.title + "\n\n" + diary.body
+=======
+        bind()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        output.send(.viewWillAppear)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        viewModel.body = textView.text
+        output.send(.viewWillDisappear)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+    }
+    
+    private func bind() {
+        viewModel.transform(input: output.eraseToAnyPublisher())
+            .receive(on: RunLoop.main)
+            .sink { event in
+                switch event {
+                case .updateTextView(let body):
+                    self.textView.text = body
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func configureTextView() {
+        textView.delegate = self
+>>>>>>> Stashed changes:Diary/Presentations/DiaryScene/DiaryListDetail/DiaryListDetailViewController.swift
     }
     
     private func setupUI() {
@@ -47,5 +86,11 @@ final class DiaryListDetailViewController: UIViewController {
             textView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             textView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         ])
+    }
+}
+
+extension DiaryListDetailViewController: UITextViewDelegate {
+    func textViewDidEndEditing(_ textView: UITextView) {
+        
     }
 }
