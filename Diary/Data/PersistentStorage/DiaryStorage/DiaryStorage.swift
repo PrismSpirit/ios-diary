@@ -20,6 +20,7 @@ final class DiaryStorage {
         let request: NSFetchRequest<DiaryEntity> = DiaryEntity.fetchRequest()
         
         request.predicate = NSPredicate(format: "TRUEPREDICATE")
+        request.sortDescriptors = [NSSortDescriptor(key: "editedDate", ascending: false)]
         
         return try await taskContext.perform {
             try taskContext.fetch(request).map { $0.toDomain() }
