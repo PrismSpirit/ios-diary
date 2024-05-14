@@ -9,7 +9,7 @@ import Combine
 
 final class DiaryListViewController: UIViewController {
     private let tableView: UITableView = {
-        let tableView = UITableView()
+        let tableView = UITableView(frame: .zero)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
@@ -27,29 +27,27 @@ final class DiaryListViewController: UIViewController {
         bind()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        output.send(.viewWillAppear)
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+        output.send(.viewIsAppearing)
     }
     
     private func bind() {
-        viewModel.transform(input: output.eraseToAnyPublisher()).sink { [weak self] event in
-            guard let self else { return }
-            
-            switch event {
-            case .loadDiaryDidFail(let error):
-                break
-            case .loadDiaryDidSuccess:
-                DispatchQueue.main.async {
+        viewModel.transform(input: output.eraseToAnyPublisher())
+            .receive(on: RunLoop.main)
+            .sink { event in
+                switch event {
+                case .diaryDidLoad:
                     self.tableView.reloadData()
-                }
-            case .addDiaryDidSuccess:
-                DispatchQueue.main.async {
-                    self.tableView.reloadSections(IndexSet(integersIn: 0..<self.tableView.numberOfSections), with: .automatic)
+                case .diaryDidAdd(let diary):
+                    self.tableView.performBatchUpdates {
+                        self.viewModel.addDiaryToMemory(diary)
+                        self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+                    }
+                    self.navigationController?.pushViewController(DiaryListDetailViewController(diary: diary), animated: true)
                 }
             }
-        }
-        .store(in: &cancellables)
+            .store(in: &cancellables)
     }
     
     private func configureNavigation() {
@@ -60,7 +58,7 @@ final class DiaryListViewController: UIViewController {
     }
     
     @objc private func handleDiaryAddEvent() {
-        output.send(.diaryAddDidTouchUp)
+        output.send(.diaryAddButtonDidTouchUp)
     }
     
     private func configureTableView() {
@@ -85,30 +83,31 @@ final class DiaryListViewController: UIViewController {
 
 extension DiaryListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        output.send(.diaryDidSelect(index: indexPath.row))
         tableView.deselectRow(at: indexPath, animated: true)
+        self.navigationController?.pushViewController(DiaryListDetailViewController(diary: self.viewModel.diaries[indexPath.row]), animated: true)
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let shareAction = UIContextualAction(style: .normal,
-                                       title: nil) { [weak self] _, _, completion in
-            self?.output.send(.diaryShareDidTouchUp(index: indexPath.row))
+                                       title: nil) { _, _, completion in
+            let diaryShareActivityItemSource = DiaryShareActivityItemSource(title: DiaryListCellViewModel(diary: self.viewModel.diaries[indexPath.row]).title)
+            
+            self.present(UIActivityViewController(activityItems: [diaryShareActivityItemSource], applicationActivities: nil), animated: true)
+            self.output.send(.diaryShareButtonDidTouchUp(id: self.viewModel.diaries[indexPath.row].id))
             completion(true)
         }
         shareAction.backgroundColor = .systemBlue
         shareAction.image = UIImage(systemName: "square.and.arrow.up")
         
         let deleteAction = UIContextualAction(style: .destructive,
-                                        title: nil) { [weak self] _, _, completion in
-            guard let self else { return }
-            
-            let diaryIDOfWillBeDeleted = self.viewModel.items[indexPath.row].id
+                                        title: nil) { _, _, completion in
+            let diaryID = self.viewModel.diaries[indexPath.row].id
             
             tableView.performBatchUpdates {
-                self.viewModel.items.remove(at: indexPath.row)
+                self.viewModel.deleteDiaryFromMemory(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .automatic)
             } completion: { _ in
-                self.output.send(.diaryDeleteDidTouchUp(id: diaryIDOfWillBeDeleted))
+                self.output.send(.diaryDeleteButtonDidTouchUp(id: diaryID))
             }
             
             completion(true)
@@ -121,7 +120,7 @@ extension DiaryListViewController: UITableViewDelegate {
 
 extension DiaryListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.items.count
+        return viewModel.diaries.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -130,10 +129,42 @@ extension DiaryListViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let cellViewModel = viewModel.items[indexPath.row]
+        let cellViewModel = DiaryListCellViewModel(diary: viewModel.diaries[indexPath.row])
         
         cell.updateComponents(with: cellViewModel)
         
         return cell
+    }
+}
+
+import LinkPresentation
+final class DiaryShareActivityItemSource: NSObject, UIActivityItemSource {
+    private let title: String
+    
+    init(title: String) {
+        self.title = title
+    }
+    
+    func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
+        return title
+    }
+    
+    func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
+        return title
+    }
+    
+    func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivity.ActivityType?) -> String {
+        return "asdf"
+    }
+    
+    func activityViewControllerLinkMetadata(_ activityViewController: UIActivityViewController) -> LPLinkMetadata? {
+        let image = UIImage()
+        
+        
+        let metadata = LPLinkMetadata()
+        metadata.title = title
+        metadata.imageProvider = NSItemProvider(object: image.withTintColor(.green))
+        metadata.originalURL = URL(string: "Text")
+        return metadata
     }
 }

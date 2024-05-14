@@ -8,83 +8,99 @@
 import Foundation
 import Combine
 
-final class DiaryListViewModel {
+final class DiaryListViewModel: ObservableObject {
     enum Input {
-        case viewWillAppear
-        case diaryAddDidTouchUp
-        case diaryShareDidTouchUp(index: Int)
-        case diaryDeleteDidTouchUp(id: UUID)
-        case diaryDidSelect(index: Int)
+        case viewIsAppearing
+        case diaryAddButtonDidTouchUp
+        case diaryShareButtonDidTouchUp(id: UUID)
+        case diaryDeleteButtonDidTouchUp(id: UUID)
+        case diaryDidSelect
     }
     
     enum Output {
-        case loadDiaryDidFail(error: Error)
-        case loadDiaryDidSuccess
-        case addDiaryDidSuccess
+        case diaryDidLoad
+        case diaryDidAdd(diary: Diary)
     }
     
     private let diaryListUseCase: DiaryListUseCase
     private let output: PassthroughSubject<Output, Never> = .init()
     private var cancellables: Set<AnyCancellable> = .init()
     
-    var items: [DiaryListCellViewModel] = []
+    var diaries: [Diary] = []
     
     init(diaryListUseCase: DiaryListUseCase) {
         self.diaryListUseCase = diaryListUseCase
     }
     
+    func addDiaryToMemory(_ diary: Diary) {
+        diaries.insert(diary, at: 0)
+    }
+    
+    func deleteDiaryFromMemory(at index: Int) {
+        diaries.remove(at: index)
+    }
+    
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
-        input.sink { [weak self] event in
+        input.sink { event in
             switch event {
-            case .viewWillAppear:
-                self?.loadDiaries()
-            case .diaryAddDidTouchUp:
-                self?.addDiary()
-            case .diaryShareDidTouchUp:
+            case .viewIsAppearing:
+                self.loadDiaryFromDisk()
+            case .diaryAddButtonDidTouchUp:
+                self.addDiaryToDisk()
+            case .diaryShareButtonDidTouchUp(let diaryID):
                 break
-            case .diaryDeleteDidTouchUp(let diaryID):
-                self?.deleteDiary(id: diaryID)
-            case .diaryDidSelect(let index):
-                break
+            case .diaryDeleteButtonDidTouchUp(let diaryID):
+                self.deleteDiaryFromDisk(id: diaryID)
+            case .diaryDidSelect:
+                print("dkfjdlk")
             }
         }
         .store(in: &cancellables)
         return output.eraseToAnyPublisher()
     }
     
-    private func loadDiaries() {
+    private func loadDiaryFromDisk() {
         diaryListUseCase.loadDiaries()
-            .catch { [weak self] _ in
-                Just([])
-            }
-            .sink { [weak self] in
-                self?.items = $0.map { DiaryListCellViewModel(diary: $0) }
-                self?.output.send(.loadDiaryDidSuccess)
+            .sink { completion in
+                switch completion {
+                case .finished: break
+                case .failure(let error):
+                    // TODO: Alert Needed
+                    break
+                }
+            } receiveValue: { diaries in
+                self.diaries = diaries
+                self.output.send(.diaryDidLoad)
             }
             .store(in: &cancellables)
     }
     
-    private func addDiary() {
-        let newDiary = Diary(id: UUID(), body: "default body", editedDate: Date())
+    private func addDiaryToDisk() {
+        let newDiary = Diary(id: UUID(), body: "", editedDate: Date())
         
-        diaryListUseCase.addDiary(diary: newDiary).sink { [weak self] completion in
-            if case .failure(let error) = completion {
-                
+        diaryListUseCase.addDiary(diary: newDiary).sink { completion in
+            switch completion {
+            case .finished: break
+            case .failure(let error):
+                // TODO: Alert Needed
+                break
             }
-        } receiveValue: { [weak self] in
-            self?.loadDiaries()
-            self?.output.send(.addDiaryDidSuccess)
+        } receiveValue: { _ in
+            self.output.send(.diaryDidAdd(diary: newDiary))
         }
         .store(in: &cancellables)
     }
     
-    private func deleteDiary(id: UUID) {
-        diaryListUseCase.deleteDiary(diaryID: id).sink { [weak self] completion in
-            if case .failure(let error) = completion {
-                
+    private func deleteDiaryFromDisk(id: UUID) {
+        diaryListUseCase.deleteDiary(diaryID: id).sink { completion in
+            switch completion {
+            case .finished: break
+            case .failure(let error):
+                // TODO: Alert Needed
+                break
             }
-        } receiveValue: { [weak self] in
-            self?.loadDiaries()
+        } receiveValue: { _ in
+            
         }
         .store(in: &cancellables)
     }
