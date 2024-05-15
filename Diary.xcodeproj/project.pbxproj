@@ -630,7 +630,7 @@
 			);
 			currentVersion = C4EB7D9E2BEDAC6E008E64F7 /* Diary.xcdatamodel */;
 			name = Diary.xcdatamodeld;
-			path = "/Users/prism/Documents/Github/ios-diary/Diary/Data/PersistentStorage/CoreDataStorage/Diary.xcdatamodeld";
+			path = Diary.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
