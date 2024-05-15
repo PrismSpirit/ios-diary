@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Combine
 
 final class DiaryTableViewCell: UITableViewCell, ReuseIdentifiable {
     private let titleLabel: UILabel = {
