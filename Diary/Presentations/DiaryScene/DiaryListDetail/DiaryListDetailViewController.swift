@@ -46,16 +46,6 @@ final class DiaryListDetailViewController: UIViewController {
         output.send(.viewWillAppear)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        viewModel.body = textView.text
-        output.send(.viewWillDisappear)
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-    }
-    
     private func bind() {
         viewModel.transform(input: output.eraseToAnyPublisher())
             .receive(on: RunLoop.main)
@@ -109,6 +99,7 @@ final class DiaryListDetailViewController: UIViewController {
 
 extension DiaryListDetailViewController: UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
-        
+        viewModel.body = textView.text
+        output.send(.keyboardDidDismiss)
     }
 }

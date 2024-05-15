@@ -14,7 +14,6 @@ final class DiaryListViewModel: ObservableObject {
         case diaryAddButtonDidTouchUp
         case diaryShareButtonDidTouchUp(id: UUID)
         case diaryDeleteButtonDidTouchUp(id: UUID)
-        case diaryDidSelect
     }
     
     enum Output {
@@ -51,8 +50,6 @@ final class DiaryListViewModel: ObservableObject {
                 break
             case .diaryDeleteButtonDidTouchUp(let diaryID):
                 self.deleteDiaryFromDisk(id: diaryID)
-            case .diaryDidSelect:
-                print("dkfjdlk")
             }
         }
         .store(in: &cancellables)
