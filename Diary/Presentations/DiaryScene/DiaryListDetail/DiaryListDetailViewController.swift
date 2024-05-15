@@ -53,7 +53,7 @@ final class DiaryListDetailViewController: UIViewController {
                 switch event {
                 case .updateTextView(let text):
                     self.textView.text = text
-                case .diaryDidDeleted:
+                case .diaryDidDelete:
                     self.navigationController?.popViewController(animated: true)
                 }
             }

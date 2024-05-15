@@ -17,7 +17,7 @@ final class DiaryListDetailViewModel {
     
     enum Output {
         case updateTextView(text: String)
-        case diaryDidDeleted
+        case diaryDidDelete
     }
     
     private let diaryListDetailUseCase: DiaryListDetailUseCase
@@ -58,6 +58,7 @@ final class DiaryListDetailViewModel {
             switch completion {
             case .finished: break
             case .failure(let error):
+                // TODO: Alert Needed
                 break
             }
         } receiveValue: { _ in
@@ -75,7 +76,7 @@ final class DiaryListDetailViewModel {
                 break
             }
         } receiveValue: { _ in
-            self.output.send(.diaryDidDeleted)
+            self.output.send(.diaryDidDelete)
         }
         .store(in: &cancellables)
     }
