@@ -35,6 +35,7 @@ final class DiaryListDetailViewController: UIViewController {
         super.viewDidLoad()
         
         configureTextView()
+        configureNavigation()
         setupUI()
         
         bind()
@@ -62,6 +63,10 @@ final class DiaryListDetailViewController: UIViewController {
                 switch event {
                 case .updateTextView(let body):
                     self.textView.text = body
+                case .diaryDidDeleted:
+                    DispatchQueue.main.async {
+                        self.navigationController?.popViewController(animated: true)
+                    }
                 }
             }
             .store(in: &cancellables)
@@ -69,6 +74,14 @@ final class DiaryListDetailViewController: UIViewController {
     
     private func configureTextView() {
         textView.delegate = self
+        textView.becomeFirstResponder()
+    }
+    
+    private func configureNavigation() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "더보기",
+                                                            style: .done,
+                                                            target: self,
+                                                            action: #selector(showAlertSheet))
     }
     
     private func setupUI() {
@@ -81,6 +94,15 @@ final class DiaryListDetailViewController: UIViewController {
             textView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             textView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         ])
+    }
+    
+    @objc private func showAlertSheet() {
+        AlertHelper.showActionSheet(title: nil, message: nil, viewController: self) {
+            let diaryShareActivityItemSource = DiaryShareActivityItemSource(title: self.viewModel.body)
+            self.present(UIActivityViewController(activityItems: [diaryShareActivityItemSource], applicationActivities: nil), animated: true)
+        } delete: {
+            self.output.send(.diaryDeleteActionSheetDidTouchUp(id: self.viewModel.id))
+        }
     }
 }
 

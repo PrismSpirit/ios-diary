@@ -13,10 +13,12 @@ final class DiaryListDetailViewModel {
         case viewWillAppear
         case viewWillDisappear
         case keyboardDidDismiss
+        case diaryDeleteActionSheetDidTouchUp(id: UUID)
     }
     
     enum Output {
         case updateTextView(body: String)
+        case diaryDidDeleted
     }
     
     private let diaryListDetailUseCase: DiaryListDetailUseCase
@@ -46,6 +48,8 @@ final class DiaryListDetailViewModel {
                 self.updateDiary(id: self.id, body: self.body)
             case .keyboardDidDismiss:
                 break
+            case .diaryDeleteActionSheetDidTouchUp(id: let id):
+                self.deleteDiary(id: id)
             }
         }
         .store(in: &cancellables)
@@ -64,5 +68,19 @@ final class DiaryListDetailViewModel {
         }
         .store(in: &cancellables)
     }
-}
     
+    func deleteDiary(id: UUID) {
+        diaryListDetailUseCase.deleteDiary(diaryID: id).sink { completion in
+            switch completion {
+            case .finished:
+                break
+            case .failure(let error):
+                print(error.localizedDescription)
+                break
+            }
+        } receiveValue: { _ in
+            self.output.send(.diaryDidDeleted)
+        }
+        .store(in: &cancellables)
+    }
+}
