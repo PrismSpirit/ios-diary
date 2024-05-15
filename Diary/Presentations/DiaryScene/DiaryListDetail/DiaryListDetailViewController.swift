@@ -51,12 +51,10 @@ final class DiaryListDetailViewController: UIViewController {
             .receive(on: RunLoop.main)
             .sink { event in
                 switch event {
-                case .updateTextView(let body):
-                    self.textView.text = body
+                case .updateTextView(let text):
+                    self.textView.text = text
                 case .diaryDidDeleted:
-                    DispatchQueue.main.async {
-                        self.navigationController?.popViewController(animated: true)
-                    }
+                    self.navigationController?.popViewController(animated: true)
                 }
             }
             .store(in: &cancellables)
@@ -89,7 +87,8 @@ final class DiaryListDetailViewController: UIViewController {
     
     @objc private func showAlertSheet() {
         AlertHelper.showActionSheet(title: nil, message: nil, viewController: self) {
-            self.present(UIActivityViewController(activityItems: [self.viewModel.body], applicationActivities: nil), animated: true)
+            let textToShare = self.viewModel.body
+            self.present(UIActivityViewController(activityItems: [textToShare], applicationActivities: nil), animated: true)
         } delete: {
             self.output.send(.diaryDeleteActionSheetDidTouchUp(id: self.viewModel.id))
         }

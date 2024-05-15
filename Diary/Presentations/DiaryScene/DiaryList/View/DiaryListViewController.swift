@@ -40,11 +40,10 @@ final class DiaryListViewController: UIViewController {
                 case .diaryDidLoad:
                     self.tableView.reloadData()
                 case .diaryDidAdd(let diary):
-                    self.tableView.performBatchUpdates {
-                        self.viewModel.addDiaryToMemory(diary)
-                        self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
-                    }
+                    self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
                     self.navigationController?.pushViewController(DiaryListDetailViewController(diary: diary), animated: true)
+                case .diaryDidDelete(let index):
+                    self.tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
                 }
             }
             .store(in: &cancellables)
@@ -84,14 +83,16 @@ final class DiaryListViewController: UIViewController {
 extension DiaryListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
         self.navigationController?.pushViewController(DiaryListDetailViewController(diary: self.viewModel.diaries[indexPath.row]), animated: true)
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let shareAction = UIContextualAction(style: .normal,
                                        title: nil) { _, _, completion in
-            self.present(UIActivityViewController(activityItems: [self.viewModel.diaries[indexPath.row].body], applicationActivities: nil), animated: true)
-            self.output.send(.diaryShareButtonDidTouchUp(id: self.viewModel.diaries[indexPath.row].id))
+            let textToShare = self.viewModel.diaries[indexPath.row].body
+            self.present(UIActivityViewController(activityItems: [textToShare], applicationActivities: nil), animated: true)
+            
             completion(true)
         }
         shareAction.backgroundColor = .systemBlue
@@ -99,20 +100,16 @@ extension DiaryListViewController: UITableViewDelegate {
         
         let deleteAction = UIContextualAction(style: .destructive,
                                         title: nil) { _, _, completion in
-            let diaryID = self.viewModel.diaries[indexPath.row].id
-            
-            tableView.performBatchUpdates {
-                self.viewModel.deleteDiaryFromMemory(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: .automatic)
-            } completion: { _ in
-                self.output.send(.diaryDeleteButtonDidTouchUp(id: diaryID))
-            }
+            self.output.send(.diaryDeleteButtonDidTouchUp(index: indexPath.row))
             
             completion(true)
         }
         deleteAction.image = UIImage(systemName: "trash.fill")
         
-        return UISwipeActionsConfiguration(actions: [deleteAction, shareAction])
+        let swipeActionConfiguration = UISwipeActionsConfiguration(actions: [deleteAction, shareAction])
+        swipeActionConfiguration.performsFirstActionWithFullSwipe = false
+        
+        return swipeActionConfiguration
     }
 }
 

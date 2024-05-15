@@ -16,7 +16,7 @@ final class DiaryListDetailViewModel {
     }
     
     enum Output {
-        case updateTextView(body: String)
+        case updateTextView(text: String)
         case diaryDidDeleted
     }
     
@@ -42,10 +42,10 @@ final class DiaryListDetailViewModel {
         input.sink { event in
             switch event {
             case .viewWillAppear:
-                self.output.send(.updateTextView(body: self.body))
+                self.output.send(.updateTextView(text: self.body))
             case .keyboardDidDismiss:
                 self.updateDiary(id: self.id, body: self.body)
-            case .diaryDeleteActionSheetDidTouchUp(id: let id):
+            case .diaryDeleteActionSheetDidTouchUp(let id):
                 self.deleteDiary(id: id)
             }
         }
@@ -69,10 +69,9 @@ final class DiaryListDetailViewModel {
     func deleteDiary(id: UUID) {
         diaryListDetailUseCase.deleteDiary(diaryID: id).sink { completion in
             switch completion {
-            case .finished:
-                break
+            case .finished: break
             case .failure(let error):
-                print(error.localizedDescription)
+                // TODO: Alert Needed
                 break
             }
         } receiveValue: { _ in
