@@ -75,6 +75,7 @@ final class DiaryListDetailViewController: UIViewController {
     private func configureTextView() {
         textView.delegate = self
         textView.becomeFirstResponder()
+        textView.alwaysBounceVertical = true
     }
     
     private func configureNavigation() {
