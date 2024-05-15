@@ -90,9 +90,7 @@ extension DiaryListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let shareAction = UIContextualAction(style: .normal,
                                        title: nil) { _, _, completion in
-            let diaryShareActivityItemSource = DiaryShareActivityItemSource(title: DiaryListCellViewModel(diary: self.viewModel.diaries[indexPath.row]).title)
-            
-            self.present(UIActivityViewController(activityItems: [diaryShareActivityItemSource], applicationActivities: nil), animated: true)
+            self.present(UIActivityViewController(activityItems: [self.viewModel.diaries[indexPath.row].body], applicationActivities: nil), animated: true)
             self.output.send(.diaryShareButtonDidTouchUp(id: self.viewModel.diaries[indexPath.row].id))
             completion(true)
         }
@@ -134,37 +132,5 @@ extension DiaryListViewController: UITableViewDataSource {
         cell.updateComponents(with: cellViewModel)
         
         return cell
-    }
-}
-
-import LinkPresentation
-final class DiaryShareActivityItemSource: NSObject, UIActivityItemSource {
-    private let title: String
-    
-    init(title: String) {
-        self.title = title
-    }
-    
-    func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
-        return title
-    }
-    
-    func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
-        return title
-    }
-    
-    func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivity.ActivityType?) -> String {
-        return "asdf"
-    }
-    
-    func activityViewControllerLinkMetadata(_ activityViewController: UIActivityViewController) -> LPLinkMetadata? {
-        let image = UIImage()
-        
-        
-        let metadata = LPLinkMetadata()
-        metadata.title = title
-        metadata.imageProvider = NSItemProvider(object: image.withTintColor(.green))
-        metadata.originalURL = URL(string: "Text")
-        return metadata
     }
 }

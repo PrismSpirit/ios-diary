@@ -89,8 +89,7 @@ final class DiaryListDetailViewController: UIViewController {
     
     @objc private func showAlertSheet() {
         AlertHelper.showActionSheet(title: nil, message: nil, viewController: self) {
-            let diaryShareActivityItemSource = DiaryShareActivityItemSource(title: self.viewModel.body)
-            self.present(UIActivityViewController(activityItems: [diaryShareActivityItemSource], applicationActivities: nil), animated: true)
+            self.present(UIActivityViewController(activityItems: [self.viewModel.body], applicationActivities: nil), animated: true)
         } delete: {
             self.output.send(.diaryDeleteActionSheetDidTouchUp(id: self.viewModel.id))
         }
