@@ -10,21 +10,23 @@ import UIKit
 struct AlertHelper {
     enum AlertType {
         case onlyConfirm
-        case confirmAndCancel
+        case deleteAndCancel
     }
     
     static func showAlert(title: String?, message: String?, type: AlertType, viewController: UIViewController, confirm: @escaping () -> Void) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
-        let confirmAction = UIAlertAction(title: "확인", style: .default, handler: { _ in
-            confirm()
-        })
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel)
-        
         switch type {
         case .onlyConfirm:
+            let confirmAction = UIAlertAction(title: "확인", style: .default, handler: { _ in
+                confirm()
+            })
             alertController.addAction(confirmAction)
-        case .confirmAndCancel:
+        case .deleteAndCancel:
+            let confirmAction = UIAlertAction(title: "삭제", style: .destructive, handler: { _ in
+                confirm()
+            })
+            let cancelAction = UIAlertAction(title: "취소", style: .cancel)
             alertController.addAction(confirmAction)
             alertController.addAction(cancelAction)
         }
@@ -39,7 +41,7 @@ struct AlertHelper {
             share()
         })
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-            self.showAlert(title: "진짜요?", message: "정말로 삭제하시겠어요?", type: .confirmAndCancel, viewController: viewController) {
+            self.showAlert(title: "진짜요?", message: "정말로 삭제하시겠어요?", type: .deleteAndCancel, viewController: viewController) {
                 delete()
             }
         }
