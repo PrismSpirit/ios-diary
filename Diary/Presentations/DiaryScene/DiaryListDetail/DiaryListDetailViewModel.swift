@@ -54,7 +54,7 @@ final class DiaryListDetailViewModel {
         return output.eraseToAnyPublisher()
     }
     
-    func updateDiary(id: UUID, body: String) {
+    private func updateDiary(id: UUID, body: String) {
         diaryListDetailUseCase.updateDiary(diaryID: id, body: body).sink { completion in
             switch completion {
             case .finished: break
@@ -68,7 +68,7 @@ final class DiaryListDetailViewModel {
         .store(in: &cancellables)
     }
     
-    func deleteDiary(id: UUID) {
+    private func deleteDiary(id: UUID) {
         diaryListDetailUseCase.deleteDiary(diaryID: id).sink { completion in
             switch completion {
             case .finished: break

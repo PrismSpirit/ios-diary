@@ -78,10 +78,10 @@ final class DiaryListViewModel: ObservableObject {
     }
     
     private func deleteDiary(at index: Int) {
-        let diaryID = self.diaries[index].id
-        diaries.remove(at: index)
+        guard let diary = self.diaries[safeIndex: index] else { return }
         
-        diaryListUseCase.deleteDiary(diaryID: diaryID).sink { completion in
+        diaries.remove(at: index)
+        diaryListUseCase.deleteDiary(diaryID: diary.id).sink { completion in
             switch completion {
             case .finished: break
             case .failure(let error):

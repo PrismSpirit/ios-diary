@@ -29,7 +29,7 @@ final class DiaryStorage {
     
     func addDiary(diary: Diary) async throws {
         let taskContext = coreDataStorage.newTaskContext()
-        let diaryEntity = DiaryEntity(diary: diary, insertInto: taskContext)
+        _ = DiaryEntity(diary: diary, insertInto: taskContext)
         
         try await taskContext.perform {
             try taskContext.save()

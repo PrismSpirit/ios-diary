@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AppDIContainer {
+final class AppDIContainer {
     static let shared = AppDIContainer()
     
     lazy var coreDataStorage: CoreDataStorage = CoreDataStorage()

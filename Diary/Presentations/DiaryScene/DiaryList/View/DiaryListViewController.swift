@@ -94,13 +94,17 @@ extension DiaryListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        self.navigationController?.pushViewController(AppDIContainer.shared.makeDiaryDetailViewController(diary: self.viewModel.diaries[indexPath.row]), animated: true)
+        guard let diary = self.viewModel.diaries[safeIndex: indexPath.row] else { return }
+        let diaryDetailViewController = AppDIContainer.shared.makeDiaryDetailViewController(diary: diary)
+        self.navigationController?.pushViewController(diaryDetailViewController, animated: true)
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        guard let diary = self.viewModel.diaries[safeIndex: indexPath.row] else { return nil }
+        
         let shareAction = UIContextualAction(style: .normal,
                                        title: nil) { _, _, completion in
-            let textToShare = self.viewModel.diaries[indexPath.row].body
+            let textToShare = diary.body
             self.present(UIActivityViewController(activityItems: [textToShare], applicationActivities: nil), animated: true)
             
             completion(true)
@@ -129,12 +133,13 @@ extension DiaryListViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: DiaryTableViewCell.reuseIdentifier,
+        guard let diary = viewModel.diaries[safeIndex: indexPath.row],
+              let cell = tableView.dequeueReusableCell(withIdentifier: DiaryTableViewCell.reuseIdentifier,
                                                        for: indexPath) as? DiaryTableViewCell else {
             return UITableViewCell()
         }
         
-        let cellViewModel = AppDIContainer.shared.makeDiaryCellViewModel(diary: viewModel.diaries[indexPath.row])
+        let cellViewModel = AppDIContainer.shared.makeDiaryCellViewModel(diary: diary)
         
         cell.updateComponents(with: cellViewModel)
         
