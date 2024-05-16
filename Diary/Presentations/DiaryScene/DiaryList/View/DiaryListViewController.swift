@@ -14,7 +14,7 @@ final class DiaryListViewController: UIViewController {
         return tableView
     }()
     
-    private let viewModel = DiaryListViewModel(diaryListUseCase: DiaryListUseCase(diaryRepository: DiaryRepository(diaryPersistentStorage: DiaryStorage(coreDataStorage: CoreDataStorage.shared))))
+    private let viewModel: DiaryListViewModel
     private let output: PassthroughSubject<DiaryListViewModel.Input, Never> = .init()
     private var cancellables: Set<AnyCancellable> = .init()
     
@@ -25,6 +25,15 @@ final class DiaryListViewController: UIViewController {
         configureTableView()
         setupUI()
         bind()
+    }
+    
+    init(viewModel: DiaryListViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewIsAppearing(_ animated: Bool) {
@@ -41,7 +50,7 @@ final class DiaryListViewController: UIViewController {
                     self.tableView.reloadData()
                 case .diaryDidAdd(let diary):
                     self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
-                    self.navigationController?.pushViewController(DiaryListDetailViewController(diary: diary), animated: true)
+                    self.navigationController?.pushViewController(AppDIContainer.shared.makeDiaryDetailViewController(diary: diary), animated: true)
                 case .diaryDidDelete(let index):
                     self.tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
                 }
@@ -84,7 +93,7 @@ extension DiaryListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        self.navigationController?.pushViewController(DiaryListDetailViewController(diary: self.viewModel.diaries[indexPath.row]), animated: true)
+        self.navigationController?.pushViewController(AppDIContainer.shared.makeDiaryDetailViewController(diary: self.viewModel.diaries[indexPath.row]), animated: true)
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
@@ -124,7 +133,7 @@ extension DiaryListViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let cellViewModel = DiaryListCellViewModel(diary: viewModel.diaries[indexPath.row])
+        let cellViewModel = AppDIContainer.shared.makeDiaryCellViewModel(diary: viewModel.diaries[indexPath.row])
         
         cell.updateComponents(with: cellViewModel)
         

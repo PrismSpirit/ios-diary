@@ -22,8 +22,8 @@ final class DiaryListDetailViewController: UIViewController {
     private let output: PassthroughSubject<DiaryListDetailViewModel.Input, Never> = .init()
     private var cancellables: Set<AnyCancellable> = .init()
     
-    init(diary: Diary) {
-        self.viewModel = DiaryListDetailViewModel(diary: diary, diaryListDetailUseCase: DiaryListDetailUseCase(diaryRepository: DiaryRepository(diaryPersistentStorage: DiaryStorage(coreDataStorage: CoreDataStorage.shared))))
+    init(viewModel: DiaryListDetailViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
