@@ -50,7 +50,8 @@ final class DiaryListViewController: UIViewController {
                     self.tableView.reloadData()
                 case .diaryDidAdd(let diary):
                     self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
-                    self.navigationController?.pushViewController(AppDIContainer.shared.makeDiaryDetailViewController(diary: diary), animated: true)
+                    let diaryDetailViewController = AppDIContainer.shared.makeDiaryDetailViewController(diary: diary, isEditModeActivated: true)
+                    self.navigationController?.pushViewController(diaryDetailViewController, animated: true)
                 case .diaryDidDelete(let index):
                     self.tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
                 }

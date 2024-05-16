@@ -35,8 +35,8 @@ class AppDIContainer {
         return DiaryListViewController(viewModel: makeDiaryListViewModel())
     }
     
-    func makeDiaryDetailViewController(diary: Diary) -> DiaryListDetailViewController {
-        return DiaryListDetailViewController(viewModel: makeDiaryListDetailViewModel(diary: diary))
+    func makeDiaryDetailViewController(diary: Diary, isEditModeActivated: Bool = false) -> DiaryListDetailViewController {
+        return DiaryListDetailViewController(viewModel: makeDiaryListDetailViewModel(diary: diary), isEditModeActivated: isEditModeActivated)
     }
     
     func makeDiaryTableViewCell() -> DiaryTableViewCell {

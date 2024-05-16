@@ -22,8 +22,11 @@ final class DiaryListDetailViewController: UIViewController {
     private let output: PassthroughSubject<DiaryListDetailViewModel.Input, Never> = .init()
     private var cancellables: Set<AnyCancellable> = .init()
     
-    init(viewModel: DiaryListDetailViewModel) {
+    private var isEditModeActivated: Bool
+    
+    init(viewModel: DiaryListDetailViewModel, isEditModeActivated: Bool) {
         self.viewModel = viewModel
+        self.isEditModeActivated = isEditModeActivated
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -63,8 +66,11 @@ final class DiaryListDetailViewController: UIViewController {
     
     private func configureTextView() {
         textView.delegate = self
-        textView.becomeFirstResponder()
         textView.alwaysBounceVertical = true
+        
+        if isEditModeActivated {
+            textView.becomeFirstResponder()
+        }
     }
     
     private func configureNavigation() {
