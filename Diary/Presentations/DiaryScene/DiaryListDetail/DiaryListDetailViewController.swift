@@ -36,6 +36,7 @@ final class DiaryListDetailViewController: UIViewController {
         
         configureTextView()
         configureNavigation()
+        configureNotificationReceiver()
         setupUI()
         
         bind()
@@ -71,6 +72,16 @@ final class DiaryListDetailViewController: UIViewController {
                                                             style: .done,
                                                             target: self,
                                                             action: #selector(showAlertSheet))
+    }
+    
+    private func configureNotificationReceiver() {
+        NotificationCenter.default
+            .publisher(for: Notification.Name("DidEnterBackground"))
+            .sink { _ in
+                self.viewModel.body = self.textView.text
+                self.output.send(.didEnterBackground)
+            }
+            .store(in: &cancellables)
     }
     
     private func setupUI() {

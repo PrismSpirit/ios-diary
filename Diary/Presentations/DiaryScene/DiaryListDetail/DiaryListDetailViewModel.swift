@@ -12,6 +12,7 @@ final class DiaryListDetailViewModel {
     enum Input {
         case viewWillAppear
         case keyboardDidDismiss
+        case didEnterBackground
         case diaryDeleteActionSheetDidTouchUp(id: UUID)
     }
     
@@ -43,7 +44,7 @@ final class DiaryListDetailViewModel {
             switch event {
             case .viewWillAppear:
                 self.output.send(.updateTextView(text: self.body))
-            case .keyboardDidDismiss:
+            case .keyboardDidDismiss, .didEnterBackground:
                 self.updateDiary(id: self.id, body: self.body)
             case .diaryDeleteActionSheetDidTouchUp(let id):
                 self.deleteDiary(id: id)
