@@ -53,7 +53,8 @@ final class DiaryListDetailViewController: UIViewController {
     private func bind() {
         viewModel.transform(input: output.eraseToAnyPublisher())
             .receive(on: RunLoop.main)
-            .sink { event in
+            .sink { [weak self] event in
+                guard let self else { return }
                 switch event {
                 case .updateTextView(let text):
                     self.textView.text = text
@@ -83,7 +84,8 @@ final class DiaryListDetailViewController: UIViewController {
     private func configureNotificationReceiver() {
         NotificationCenter.default
             .publisher(for: Notification.Name("DidEnterBackground"))
-            .sink { _ in
+            .sink { [weak self] _ in
+                guard let self else { return }
                 self.viewModel.body = self.textView.text
                 self.output.send(.didEnterBackground)
             }

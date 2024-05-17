@@ -40,7 +40,8 @@ final class DiaryListDetailViewModel {
     }
     
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
-        input.sink { event in
+        input.sink { [weak self] event in
+            guard let self else { return }
             switch event {
             case .viewWillAppear:
                 self.output.send(.updateTextView(text: self.body))
@@ -76,8 +77,8 @@ final class DiaryListDetailViewModel {
                 // TODO: Alert Needed
                 break
             }
-        } receiveValue: { _ in
-            self.output.send(.diaryDidDelete)
+        } receiveValue: { [weak self] _ in
+            self?.output.send(.diaryDidDelete)
         }
         .store(in: &cancellables)
     }

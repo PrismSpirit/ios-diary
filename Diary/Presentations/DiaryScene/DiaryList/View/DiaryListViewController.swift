@@ -44,7 +44,8 @@ final class DiaryListViewController: UIViewController {
     private func bind() {
         viewModel.transform(input: output.eraseToAnyPublisher())
             .receive(on: RunLoop.main)
-            .sink { event in
+            .sink { [weak self] event in
+                guard let self else { return }
                 switch event {
                 case .diaryDidLoad:
                     self.tableView.reloadData()

@@ -15,7 +15,7 @@ final class AppDIContainer {
     
     // MARK: - Repository
     
-    func makeDiaryRepository() -> DiaryRepository {
+    func makeDiaryRepository() -> DiaryRepositoryProtocol {
         return DiaryRepository(diaryPersistentStorage: diaryStorage)
     }
     
